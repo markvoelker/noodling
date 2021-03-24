@@ -49,14 +49,17 @@ test_ips = ('8.8.8.8', '192.168.111.161', '1.2.3.4', '224.0.0.1',
 for ip in test_ips:
     # This is a nanosecond timer in Python3
     start = time.perf_counter_ns()
-
     rnode = rtree.search_best(ip)
-    
     stop = time.perf_counter_ns()
+
+    wstart = time.perf_counter_ns()
+    rnode = rtree.search_worst(ip)
+    wstop = time.perf_counter_ns()
     
     # If we get a null back, the address wasn't found in any of the subnets
     # in the tree, so it's allowed.  Otherwise, it's blocked.
     if rnode:
-        print(f"%s BLOCKED in {stop - start:d} ns!" % ip)
+        print(f"%s BLOCKED in search_best: {stop - start:d}ns, search_worst: {wstop - wstart:d}ns!" % ip)
     else:
-        print(f"%s allowed in {stop - start:d} ns." % ip)
+        print(f"%s allowed in search_best:{stop - start:d}ns, search_worst: {stop - start:d}ns." % ip)
+
