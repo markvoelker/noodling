@@ -13,6 +13,7 @@ rtree = radix.Radix()
 # Open up an ipset file and add it's entries to the tree.
 subnet_count = 0
 with open(ipset_file) as fh:
+    load_start = time.perf_counter()
     while True:
         line = fh.readline()
         if not line:
@@ -29,6 +30,8 @@ with open(ipset_file) as fh:
             # Print a note so we can see how RSS grows as the tree grows.
             print("Loaded %d subnets using %d KB of memory" % 
                     (subnet_count, getrusage(RUSAGE_SELF)[2]))
+    load_stop = time.perf_counter()
+    print(f"Loading ipset into radix tree took {load_stop - load_start:f} s.")
 
 # Mind your P's and Q's, and always close your filehandles.
 fh.close()
