@@ -1,0 +1,23 @@
+syntax = "proto3";
+package ada.v1;  // Always version your API's!
+
+service Ada {
+  rpc Check (LoginIpAddr) returns (CheckResponse);
+}
+
+// An IP address to be tested against the block list.
+message LoginIpAddr {
+  int32 version = 1;
+  string ip_addr = 2;
+}
+
+// The results from an IP check.  If the IP is untrusted, set
+// allwed to false, otherwise set to true.  If allowed = false,
+// we also return a string containing the name of the blocklist
+// that deemed this IP to be untrusted.
+message CheckResponse {
+  int32 version = 1;
+  bool allowed = 2;
+  string blocklist = 3;
+}
+
